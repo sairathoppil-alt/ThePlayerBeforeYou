@@ -1,5 +1,8 @@
 extends "res://scripts/ui/screen_base.gd"
 
+var _overwrite_dialog: ConfirmationDialog
+var _save_error_dialog: AcceptDialog
+
 
 func _ready() -> void:
 	accent_color = CYAN
@@ -28,8 +31,20 @@ func _ready() -> void:
 	var back := make_back_button("res://scenes/ui/scenario_selection.tscn")
 	actions.add_child(back)
 	var begin := make_button("BEGIN MISSION", true, CYAN)
-	begin.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/past/past_timeline.tscn"))
+	begin.pressed.connect(_on_begin_mission_pressed)
 	actions.add_child(begin)
+
+	_overwrite_dialog = ConfirmationDialog.new()
+	_overwrite_dialog.title = "Existing Mission Save"
+	_overwrite_dialog.dialog_text = "Starting a new mission will overwrite the existing save file. Continue?"
+	_overwrite_dialog.confirmed.connect(_start_new_mission)
+	add_child(_overwrite_dialog)
+
+	_save_error_dialog = AcceptDialog.new()
+	_save_error_dialog.title = "Save Data Notice"
+	add_child(_save_error_dialog)
+	if not SaveManager.last_error.is_empty():
+		_show_save_error(SaveManager.last_error)
 
 
 func _add_timeline_card(container: HBoxContainer, kicker: String, year: String, detail: String, timeline_accent: Color) -> void:
@@ -42,3 +57,24 @@ func _add_timeline_card(container: HBoxContainer, kicker: String, year: String, 
 	content.add_child(make_label(kicker, 12, timeline_accent))
 	content.add_child(make_label(year, 34, PALE))
 	content.add_child(make_label(detail, 14, MUTED))
+
+
+func _on_begin_mission_pressed() -> void:
+	if SaveManager.has_existing_save():
+		_overwrite_dialog.popup_centered()
+	else:
+		_start_new_mission()
+
+
+func _start_new_mission() -> void:
+	if not SaveManager.initialize_new_mission():
+		_show_save_error(SaveManager.last_error)
+		return
+	var change_error := get_tree().change_scene_to_file("res://scenes/past/past_timeline.tscn")
+	if change_error != OK:
+		_show_save_error("The mission save was created, but the past timeline could not be opened: %s" % error_string(change_error))
+
+
+func _show_save_error(message: String) -> void:
+	_save_error_dialog.dialog_text = message
+	_save_error_dialog.popup_centered()
