@@ -18,23 +18,23 @@ func _ready() -> void:
 	trunk.position.y = 1.5
 	add_child(trunk)
 
-	for index in range(3):
+	for index in range(5):
 		var crown := MeshInstance3D.new()
 		crown.name = "Crown%d" % index
 		var sphere := SphereMesh.new()
-		sphere.radius = 1.7 if index == 0 else 1.35
-		sphere.height = sphere.radius * 1.7
+		sphere.radius = 1.65 if index == 0 else 1.18
+		sphere.height = sphere.radius * 2.0
 		sphere.radial_segments = 7
-		sphere.rings = 4
+		sphere.rings = 5
 		crown.mesh = sphere
 		var foliage := StandardMaterial3D.new()
 		foliage.albedo_color = crown_color.darkened(float(index) * 0.08)
 		foliage.roughness = 1.0
 		crown.material_override = foliage
 		crown.position = Vector3(
-			float(index - 1) * 0.72,
-			3.0 + float(index % 2) * 0.65,
-			float((index + 1) % 2) * 0.45
+			[0.0, -0.86, 0.78, -0.52, 0.48][index],
+			3.2 + float(index % 3) * 0.65,
+			[0.0, 0.35, -0.42, -0.72, 0.72][index]
 		)
 		add_child(crown)
 

@@ -1,11 +1,11 @@
 extends "res://scripts/ui/screen_base.gd"
 
 const STEPS := [
-	"Prepare the town in 2026.",
-	"Make decisions using limited resources.",
-	"Investigate the consequences in 2046.",
-	"Send clues back using Time Echo.",
-	"Revise decisions and prevent the flood."
+	"WASD or arrows move, mouse looks, Space jumps and Shift sprints.",
+	"Press E near items and machinery; Tab opens your six-slot inventory.",
+	"M opens the shared-coordinate map, J the journal and C Echo Link.",
+	"Press T for a real partner projection, or V to observe the other 3D timeline.",
+	"In Local Demonstration, F4 switches roles. F reveals historical details in 2046."
 ]
 
 
@@ -13,7 +13,7 @@ func _ready() -> void:
 	accent_color = CYAN
 	super._ready()
 
-	var page := create_page("A SHARED FATE, ACROSS TIME", "How to Play", "Two players. Two timelines. One chance to change what happens.")
+	var page := create_page("A SHARED FATE, ACROSS TIME", "How to Play", "Explore together online, or inspect both timelines locally.")
 	var list := VBoxContainer.new()
 	list.add_theme_constant_override("separation", 8)
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL

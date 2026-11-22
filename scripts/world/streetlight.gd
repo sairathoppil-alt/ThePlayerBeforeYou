@@ -6,6 +6,7 @@ const Palette = preload("res://scripts/core/town_palette.gd")
 func _ready() -> void:
 	_add_cylinder("Pole", 0.12, 5.2, Vector3(0, 2.6, 0), Palette.METAL)
 	_add_box("Arm", Vector3(1.25, 0.12, 0.12), Vector3(0.55, 5.05, 0), Palette.METAL)
+	_add_cylinder("Lantern collar", 0.36, 0.14, Vector3(1.1, 5.22, 0), Palette.METAL)
 
 	var lamp := MeshInstance3D.new()
 	lamp.name = "Lamp"
@@ -23,6 +24,8 @@ func _ready() -> void:
 	lamp.material_override = material
 	lamp.position = Vector3(1.1, 4.95, 0)
 	add_child(lamp)
+	_add_cylinder("Lantern roof", 0.48, 0.16, Vector3(1.1, 5.36, 0), Palette.METAL)
+	_add_cylinder("Lantern base", 0.42, 0.1, Vector3(1.1, 4.62, 0), Palette.METAL)
 
 	var body := StaticBody3D.new()
 	body.name = "PoleCollision"

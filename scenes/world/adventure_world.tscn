@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/adventure_hud.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/past/adventure_world.gd" id="2"]
+
+[node name="AdventureWorld" type="Node3D"]
+script = ExtResource("2")
+
+[node name="WorldRoot" type="Node3D" parent="."]
+
+[node name="AdventureHUD" parent="." instance=ExtResource("1")]

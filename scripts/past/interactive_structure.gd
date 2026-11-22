@@ -105,12 +105,59 @@ func _build_visuals() -> void:
 			_build_shelter()
 		"warning_tower":
 			_build_warning_tower()
+	_build_status_marker()
+
+
+func _build_status_marker() -> void:
+	var names := {
+		"dam": "DAM",
+		"bridge": "BRIDGE",
+		"drainage": "DRAIN",
+		"shelter": "SHELTER",
+		"warning_tower": "WARNING",
+	}
+	var status := "UPGRADED" if improved else "NEEDS WORK"
+	if structure_id == "shelter":
+		status = "READY" if improved else "BUILD SITE"
+	elif structure_id == "warning_tower":
+		status = "ACTIVE" if improved else "NOT INSTALLED"
+	var marker := Label3D.new()
+	marker.name = "StructureStatusMarker"
+	marker.text = "%s\n%s" % [names.get(structure_id, structure_name.to_upper()), status]
+	marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	marker.font_size = 38
+	marker.pixel_size = 0.013
+	marker.outline_size = 10
+	marker.outline_modulate = Color("#13212a")
+	marker.modulate = Color("#75dbe0") if improved else Color("#f0c27b")
+	marker.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	marker.shaded = false
+	marker.position.y = _marker_height()
+	_visual_root.add_child(marker)
+
+
+func _marker_height() -> float:
+	match structure_id:
+		"dam":
+			return 5.2
+		"bridge":
+			return 2.4
+		"drainage":
+			return 2.1
+		"shelter":
+			return 5.2 if improved else 2.2
+		"warning_tower":
+			return 7.5 if improved else 2.3
+	return 2.5
 
 
 func _build_dam() -> void:
 	_add_box("Dam wall", Vector3(2.2, 4.0, 27.0), Vector3(0, 1.9, 0), Palette.CONCRETE)
 	_add_box("Upper cap", Vector3(2.8, 0.45, 28.0), Vector3(0, 4.0, 0), Palette.METAL if improved else Palette.CONCRETE)
-	_add_static_box(Vector3(2.2, 4.0, 27.0), Vector3(0, 1.9, 0))
+	_add_static_box(Vector3(2.8, 4.45, 28.0), Vector3(0, 1.9, 0))
+	for z in [-10.0, -5.0, 0.0, 5.0, 10.0]:
+		_add_box("Dam face buttress", Vector3(0.45, 4.3, 0.72), Vector3(1.18, 1.95, z), Palette.FOUNDATION)
+		_add_box("Dam crest marker", Vector3(0.12, 0.42, 0.12), Vector3(0.0, 4.43, z), Palette.METAL)
 	if improved:
 		for z in [-9.0, -4.5, 0.0, 4.5, 9.0]:
 			_add_box("Reinforcement", Vector3(2.6, 4.4, 0.5), Vector3(0.0, 2.0, z), Palette.METAL)
@@ -122,6 +169,8 @@ func _build_dam() -> void:
 func _build_bridge() -> void:
 	_add_box("Bridge deck", Vector3(9.0, 0.45, 27.0), Vector3(0, -0.19, 0), Palette.WOOD if improved else Palette.CONCRETE)
 	_add_static_box(Vector3(9.0, 0.45, 27.0), Vector3(0, -0.19, 0))
+	for z in [-8.0, -3.0, 3.0, 8.0]:
+		_add_box("Bridge stone pier", Vector3(1.25, 2.4, 1.15), Vector3(0, -1.55, z), Palette.FOUNDATION)
 	for z in [-10.0, -5.0, 0.0, 5.0, 10.0]:
 		_add_box("Deck beam", Vector3(9.4, 0.2, 0.38), Vector3(0, -0.42, z), Palette.WOOD if improved else Palette.METAL)
 	if improved:

@@ -18,6 +18,10 @@ config/icon="res://icon.svg"
 [autoload]
 
 SaveManager="*res://scripts/core/save_manager.gd"
+AdventureState="*res://scripts/core/adventure_state.gd"
+MissionSystem="*res://scripts/core/mission_system.gd"
+NetworkSession="*res://scripts/core/network_session.gd"
+TemporalEnergy="*res://scripts/core/temporal_energy.gd"
 
 [display]
 
